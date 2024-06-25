@@ -5,7 +5,7 @@ public class CursorControl : MonoBehaviour
     [SerializeField] private Camera mainCam;
     [SerializeField] private LayerMask floorMask;
     [SerializeField] private float cursorHeight;
-    
+
     private Ray _ray;
     private RaycastHit _rayHit;
     private Vector3 _hitPoint;
@@ -38,6 +38,6 @@ public class CursorControl : MonoBehaviour
 
     private Vector3 RoundWorldPoint(Vector3 pos)
     {
-        return new Vector3(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y), Mathf.RoundToInt(pos.z));
+        return new Vector3(Mathf.Floor(pos.x), 0f,  Mathf.Floor(pos.z));
     }
 }
