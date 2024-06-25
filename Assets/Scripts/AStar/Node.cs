@@ -5,12 +5,19 @@ namespace AStar
     public class Node
     {
         private bool _isWalkable;
-        private Vector3 _worldPosition;
+        private Vector3 _worldPos;
 
-        public Node(bool isWalkable, Vector3 worldPosition)
+        public bool IsWalkable
+        {
+            get => _isWalkable;
+            set => _isWalkable = value;
+        }
+        public Vector3 GetWorldPosition => _worldPos;
+
+        public Node(bool isWalkable, Vector3 worldPos)
         {
             _isWalkable = isWalkable;
-            _worldPosition = worldPosition;
+            _worldPos = worldPos;
         }
     }
 }
