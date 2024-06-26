@@ -21,11 +21,12 @@ public class CursorControl : MonoBehaviour
 
     private void FixedUpdate()
     {
+        var position = mainCam.transform.position;
         _worldPoint = mainCam.ScreenToWorldPoint(new Vector3(
             Input.mousePosition.x, 
             Input.mousePosition.y, 
-            mainCam.nearClipPlane));
-        _ray.origin = mainCam.transform.position;
+            position.y));
+        _ray.origin = position;
         _ray.direction = (_worldPoint - _ray.origin).normalized;
 
         if (Physics.Raycast(_ray, out _rayHit, Mathf.Infinity, floorMask))
