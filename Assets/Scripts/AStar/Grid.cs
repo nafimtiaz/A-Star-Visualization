@@ -63,6 +63,11 @@ namespace AStar
             return _grid[xIndex, zIndex];
         }
 
+        public Node GetNodeByIndex(int gridX, int gridZ)
+        {
+            return _grid[gridX, gridZ];
+        }
+
         // Get neighbouring nodes of a node, checking 8 possible locations
         // considering grid size limits (excluding the original node itself)
         // Nodes on the border will have < 8 neighbouring nodes

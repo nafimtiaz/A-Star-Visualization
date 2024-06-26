@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AStar;
@@ -22,6 +21,9 @@ public class AppManager : MonoBehaviour
 
     private List<GameObject> _obstaclePool;
     private Dictionary<Node, GameObject> _currentObstaclesDict;
+    
+    private List<GameObject> _nodeInfoPool;
+    private Dictionary<Node, GameObject> _currentNodeInfoParentsDict;
     private Node StartNode => grid.GetNodeByPosition(start.position);
     private Node TargetNode => grid.GetNodeByPosition(target.position);
     
@@ -30,6 +32,7 @@ public class AppManager : MonoBehaviour
     {
         grid.PopulateGrid();
         CreateObstaclePool();
+        CreateNodeInfoViewsAndParents();
     }
 
     private void Update()
@@ -99,6 +102,62 @@ public class AppManager : MonoBehaviour
         grid.ToggleNodeAsObstacle(pos, false);
         _currentObstaclesDict[n].SetActive(false);
         _currentObstaclesDict.Remove(n);
+    }
+
+    #endregion
+
+    #region Node Info View
+
+    private void CreateNodeInfoViewsAndParents()
+    {
+        _currentNodeInfoParentsDict = new Dictionary<Node, GameObject>();
+        _nodeInfoPool = new List<GameObject>();
+        
+        for (int x = 0; x < grid.GridX; x++)
+        {
+            for (int z = 0; z < grid.GridZ; z++)
+            {
+                GameObject nodeInfoParent = new GameObject($"NodeInfoParent_{x}_{z}")
+                {
+                    transform =
+                    {
+                        parent = nodeInfoGridParent,
+                        localEulerAngles = Vector3.zero,
+                        localScale = Vector3.one
+                    }
+                };
+                
+                nodeInfoParent.AddComponent<Canvas>();
+                _currentNodeInfoParentsDict.Add(grid.GetNodeByIndex(x, z), nodeInfoParent);
+
+                GameObject nodeInfoViewObject = Instantiate(nodeInfoPrefab, nodeInfoPoolParent);
+                _nodeInfoPool.Add(nodeInfoViewObject);
+                nodeInfoViewObject.SetActive(false);
+            }
+        }
+    }
+
+    // Enable/Change the node info view whenever we change the status
+    public void UpdateNodeInfoViewStatus(Node n, NodeStatus status)
+    {
+        n.NodeStatus = status;
+        Transform nodeInfoViewParent = _currentNodeInfoParentsDict[n].transform;
+
+        foreach (var nodeInfoView in _nodeInfoPool)
+        {
+            if (!nodeInfoView.activeInHierarchy)
+            {
+                nodeInfoView.SetActive(true);
+                RectTransform rect = nodeInfoView.GetComponent<RectTransform>();
+                rect.SetParent(nodeInfoViewParent);
+                
+                rect.offsetMin = new Vector2(0f, 0f);
+                rect.offsetMax = new Vector2(0f, 0f);
+
+                nodeInfoView.GetComponent<NodeInfoView>().Populate(n);
+                break;
+            }
+        }
     }
 
     #endregion

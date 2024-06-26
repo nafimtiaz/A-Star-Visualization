@@ -5,6 +5,8 @@ namespace AStar
 {
     public class PathFinding : MonoBehaviour
     {
+        [SerializeField] private AppManager appManager;
+        
         // this list stores the calculated path
         private List<Node> _calculatedPath;
 
@@ -29,7 +31,7 @@ namespace AStar
             while (openSet.Count > 0)
             {
                 Node currentNode = openSet[0];
-                
+
                 for (int i = 0; i < openSet.Count; i++)
                 {
                     // Choose the open node with lowest F cost
@@ -44,7 +46,8 @@ namespace AStar
                 }
 
                 openSet.Remove(currentNode);
-                closedSet.Add(currentNode);
+                closedSet.Add(currentNode); 
+                appManager.UpdateNodeInfoViewStatus(currentNode, NodeStatus.Closed);
 
                 // If target node is found, calculate the path
                 if (currentNode == targetNode)
@@ -76,6 +79,7 @@ namespace AStar
                         if (!openSet.Contains(neighbour))
                         {
                             openSet.Add(neighbour);
+                            appManager.UpdateNodeInfoViewStatus(neighbour, NodeStatus.Open);
                         }
                     }
                 }
@@ -92,6 +96,7 @@ namespace AStar
             while (currentNode != startNode)
             {
                 path.Add(currentNode);
+                appManager.UpdateNodeInfoViewStatus(currentNode, NodeStatus.Path);
                 currentNode = currentNode.Parent;
             }
             
