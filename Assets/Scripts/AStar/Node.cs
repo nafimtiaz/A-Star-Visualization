@@ -22,6 +22,7 @@ namespace AStar
         // List of neighbouring nodes that surrounds a node, doesn't include obstacle nodes
         public List<Node> Neighbours;
         public Node Parent;
+        public NodeStatus NodeStatus;
 
         public int FCost => GCost + HCost;
 
