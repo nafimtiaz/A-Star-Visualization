@@ -5,24 +5,11 @@ namespace AStar
 {
     public class PathFinding : MonoBehaviour
     {
-        [SerializeField] private Grid grid;
-        [SerializeField] private Transform start;
-        [SerializeField] private Transform target;
-
         // this list stores the calculated path
         private List<Node> _calculatedPath;
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                grid.PopulateGrid();
-                FindPath(start.position, target.position);
-            }
-        }
-
         // This function calculates the path using A* algorithm
-        private void FindPath(Vector3 startPos, Vector3 targetPos)
+        public void FindPath(Grid grid, Vector3 startPos, Vector3 targetPos)
         {
             Node startNode = grid.GetNodeByPosition(startPos);
             Node targetNode = grid.GetNodeByPosition(targetPos);

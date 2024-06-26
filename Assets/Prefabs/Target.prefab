@@ -35,8 +35,8 @@ Transform:
 --- !u!1 &7301532930129548501
 GameObject:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 283031825659891919, guid: 0adb599e10dbd41fcbac7d59877dfbbe, type: 3}
-  m_PrefabInstance: {fileID: 5816642564510989782}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3630418295489673809}
   - component: {fileID: 2683961515304331632}
   - component: {fileID: 1901658014652192204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,8 +54,8 @@ GameObject:
 --- !u!4 &615491988992477521
 Transform:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 4072757921597902574, guid: 0adb599e10dbd41fcbac7d59877dfbbe, type: 3}
-  m_PrefabInstance: {fileID: 5816642564510989782}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7301532930129548501}
   serializedVersion: 2
@@ -69,16 +69,16 @@ Transform:
 --- !u!33 &3630418295489673809
 MeshFilter:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 4232681799093681883, guid: 0adb599e10dbd41fcbac7d59877dfbbe, type: 3}
-  m_PrefabInstance: {fileID: 5816642564510989782}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7301532930129548501}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &2683961515304331632
 MeshRenderer:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 4076891308377262537, guid: 0adb599e10dbd41fcbac7d59877dfbbe, type: 3}
-  m_PrefabInstance: {fileID: 5816642564510989782}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7301532930129548501}
   m_Enabled: 1
@@ -119,8 +119,8 @@ MeshRenderer:
 --- !u!65 &1901658014652192204
 BoxCollider:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 4166442418173400842, guid: 0adb599e10dbd41fcbac7d59877dfbbe, type: 3}
-  m_PrefabInstance: {fileID: 5816642564510989782}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7301532930129548501}
   m_Material: {fileID: 0}
@@ -137,60 +137,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1001 &5816642564510989782
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 7770246463544699672}
-    m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: m_Name
-      value: Mesh
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 0}

@@ -45,15 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0abce3667a3e34f679dd84ea49d25d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  appManager: {fileID: 0}
   mainCam: {fileID: 0}
   floorMask:
     serializedVersion: 2
     m_Bits: 64
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 128
   cursorHeight: 0.01
-  offsetX: 1
-  offsetZ: 1
-  posText: {fileID: 0}
-  cursorPosText: {fileID: 0}
 --- !u!1 &8948010804401295096
 GameObject:
   m_ObjectHideFlags: 0

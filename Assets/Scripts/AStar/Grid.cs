@@ -9,8 +9,8 @@ namespace AStar
         [SerializeField] private Vector2 gridSize;
         [SerializeField] private float nodeRadius;
 
-        private int GridX => (int)gridSize.x;
-        private int GridZ => (int)gridSize.y;
+        public int GridX => (int)gridSize.x;
+        public int GridZ => (int)gridSize.y;
     
         private Node[,] _grid;
 
@@ -18,15 +18,12 @@ namespace AStar
         {
             CreateGrid();
             CacheNodeNeighbours();
-        
-            // Adding obstacles manually for the time being
-            _grid[2, 4].IsWalkable = false;
-            _grid[3, 4].IsWalkable = false;
-            _grid[4, 4].IsWalkable = false;
-            _grid[5, 4].IsWalkable = false;
-            _grid[6, 4].IsWalkable = false;
-            _grid[6, 5].IsWalkable = false;
-            _grid[6, 6].IsWalkable = false;
+        }
+
+        public void ToggleNodeAsObstacle(Vector3 pos, bool isObstacle)
+        {
+            Node n = GetNodeByPosition(pos);
+            n.IsWalkable = !isObstacle;
         }
         
                 
