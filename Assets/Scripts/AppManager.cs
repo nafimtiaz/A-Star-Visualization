@@ -100,7 +100,7 @@ public class AppManager : MonoBehaviour
 
     #endregion
 
-    #region Start/Traget Nodes
+    #region Start/Target Nodes
 
     private Node StartNode => grid.GetNodeByPosition(start.position);
     private Node TargetNode => grid.GetNodeByPosition(target.position);

@@ -13,12 +13,15 @@ public class NodeInfoView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI HCost;
     [SerializeField] private TextMeshProUGUI FCost;
     [SerializeField] private GameObject[] dirImages;
+    [SerializeField] private GameObject glowEffect;
 
     public void Populate(Node node)
     {
         GCost.text = node.GCost.ToString();
         HCost.text = node.HCost.ToString();
         FCost.text = node.FCost.ToString();
+        
+        glowEffect.SetActive(node.NodeStatus == NodeStatus.Path);
 
         switch (node.NodeStatus)
         {
