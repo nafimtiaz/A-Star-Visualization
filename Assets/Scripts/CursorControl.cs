@@ -14,8 +14,7 @@ public class CursorControl : MonoBehaviour
     private RaycastHit _rayHit;
     private Vector3 _hitPoint;
     private Vector3 _worldPoint;
-    public bool _canPlace;
-    private Collider _obstacleInFocus;
+    public bool canPlace;
 
     public Vector3 CurrentCursorPoint => _hitPoint;
 
@@ -42,15 +41,14 @@ public class CursorControl : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _rayHit, Mathf.Infinity, floorMask))
         {
-            _canPlace = true;
+            canPlace = true;
             _hitPoint = RoundWorldPoint(_rayHit.point);
             _hitPoint.y = cursorHeight;
             transform.position = _hitPoint;
-            _obstacleInFocus = null;
         }
         else
         {
-            _canPlace = false;
+            canPlace = false;
         }
     }
 
@@ -89,7 +87,7 @@ public class CursorControl : MonoBehaviour
 
     private void RequestAddObstacle()
     {
-        if (_canPlace)
+        if (canPlace)
         {
             _hitPoint.y = 0;
             appManager.AddObstacle(_hitPoint);

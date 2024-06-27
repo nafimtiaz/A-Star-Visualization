@@ -51,7 +51,7 @@ public class AppManager : MonoBehaviour
         
         for (int i = 0; i < grid.GridX * grid.GridZ; i++)
         {
-            GameObject obstacle = Instantiate(obstaclePrefab, obstaclePoolParent, true) as GameObject;
+            GameObject obstacle = Instantiate(obstaclePrefab, obstaclePoolParent, true);
             obstacle.SetActive(false);
             _obstaclePool.Add(obstacle);
         }
@@ -83,6 +83,7 @@ public class AppManager : MonoBehaviour
                 _currentObstaclesDict.Add(n, obstacle);
                 obstacle.SetActive(true);
                 obstacle.transform.position = pos;
+                obstacle.name = $"Obstacle_{n.GridX}_{n.GridZ}";
                 break;
             }
         }

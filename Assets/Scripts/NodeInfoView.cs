@@ -32,5 +32,27 @@ public class NodeInfoView : MonoBehaviour
                 background.color = pathColor;
                 break;
         }
+        
+        SetParentDirection(node);
+    }
+
+    // This function enables the sprite that
+    // points to the parent node
+    private void SetParentDirection(Node node)
+    {
+        foreach (var image in dirImages)
+        {
+            image.SetActive(false);
+        }
+        
+        if (node.Parent == null)
+        {
+            return;
+        }
+
+        Vector3 dir = (node.Parent.WorldPos - node.WorldPos).normalized;
+        float yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        dirImages[Constants.NODE_DIR_ANGLES.IndexOf((int)yaw)].SetActive(true);
+        gameObject.name = $"NodeInfo_{node.GridX}_{node.GridZ}_{yaw}";
     }
 }

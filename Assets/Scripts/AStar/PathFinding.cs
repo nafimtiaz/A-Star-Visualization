@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -121,5 +122,20 @@ namespace AStar
             
             return Constants.NODE_DIAGONAL_DIST * distZ + (distX - distZ) * Constants.NODE_DIRECT_DIST;
         }
+
+        /*
+        private void OnDrawGizmos()
+        {
+            if (_calculatedPath != null && _calculatedPath.Count > 0)
+            {
+                Gizmos.color = Color.green;
+                foreach (var node in _calculatedPath)
+                {
+                    Vector3 origin = new Vector3(node.GridX + 0.5f, 0.25f, node.GridZ + 0.5f); 
+                    Gizmos.DrawCube(origin, new Vector3(1f, 0.5f, 1f));
+                }
+            }
+        }
+        */
     }
 }
