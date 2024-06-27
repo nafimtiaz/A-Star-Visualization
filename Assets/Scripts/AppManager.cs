@@ -143,21 +143,38 @@ public class AppManager : MonoBehaviour
     {
         n.NodeStatus = status;
         Transform nodeInfoViewParent = _currentNodeInfoParentsDict[n].transform;
+        NodeInfoView nodeInfoView = null;
 
-        foreach (var nodeInfoView in _nodeInfoPool)
+        if (nodeInfoViewParent.childCount <= 0)
         {
-            if (!nodeInfoView.activeInHierarchy)
+            foreach (var infoView in _nodeInfoPool)
             {
-                nodeInfoView.SetActive(true);
-                RectTransform rect = nodeInfoView.GetComponent<RectTransform>();
-                rect.SetParent(nodeInfoViewParent);
-                
-                rect.offsetMin = new Vector2(0f, 0f);
-                rect.offsetMax = new Vector2(0f, 0f);
-
-                nodeInfoView.GetComponent<NodeInfoView>().Populate(n);
-                break;
+                if (!infoView.activeInHierarchy)
+                {
+                    nodeInfoView = infoView.GetComponent<NodeInfoView>();
+                    break;
+                }
             }
+        }
+        else
+        {
+            nodeInfoView = nodeInfoViewParent.GetChild(0).GetComponent<NodeInfoView>();
+        }
+
+        if (nodeInfoView != null)
+        {
+            nodeInfoView.gameObject.SetActive(true);
+            RectTransform rect = nodeInfoView.GetComponent<RectTransform>();
+            rect.SetParent(nodeInfoViewParent);
+                
+            rect.offsetMin = new Vector2(0f, 0f);
+            rect.offsetMax = new Vector2(0f, 0f);
+
+            nodeInfoView.GetComponent<NodeInfoView>().Populate(n);
+        }
+        else
+        {
+            Debug.LogWarning("NodeInfoView not available in pool");
         }
     }
 
