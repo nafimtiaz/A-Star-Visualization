@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using AStar;
 using UnityEngine;
+using UnityEngine.UI;
 using Grid = AStar.Grid;
 
 public class AppManager : MonoBehaviour
 {
+    [Header("A-Star Related")]
     [SerializeField] private Transform start;
     [SerializeField] private Transform target;
     
@@ -18,6 +20,12 @@ public class AppManager : MonoBehaviour
     [SerializeField] private GameObject nodeInfoPrefab;
     [SerializeField] private Transform nodeInfoGridParent;
     [SerializeField] private Transform nodeInfoPoolParent;
+
+    [Header("UI")] 
+    [SerializeField] private CursorControl cursorControl;
+    [SerializeField] private Button nextStepButton;
+    [SerializeField] private Button completeSearchButton;
+    [SerializeField] private Button clearEverythingButton;
 
     private List<GameObject> _obstaclePool;
     private Dictionary<Node, GameObject> _currentObstaclesDict;
@@ -33,17 +41,73 @@ public class AppManager : MonoBehaviour
         grid.PopulateGrid();
         CreateObstaclePool();
         CreateNodeInfoViewsAndParents();
+        AssignButtonCallbacks();
+        cursorControl.canPlace = true;
+        pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
     }
 
-    private void Update()
+    #region UI/Callbacks
+
+    private void AssignButtonCallbacks()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            pathFinder.FindPath(grid, start.position, target.position);
-        }
+        nextStepButton.onClick.AddListener(ShowNextSearchStep);
+        completeSearchButton.onClick.AddListener(CompleteFullSearch);
+        clearEverythingButton.onClick.AddListener(ClearEverything);
     }
+
+    private void RefreshPathfindingButtons()
+    {
+        bool enable = pathFinder.IsSearchComplete;
+        nextStepButton.interactable = !enable;
+        completeSearchButton.interactable = !enable;
+    }
+
+    private void ShowNextSearchStep()
+    {
+        cursorControl.canPlace = false;
+        pathFinder.FindPath();
+        RefreshPathfindingButtons();
+    }
+    
+    private void CompleteFullSearch()
+    {
+        cursorControl.canPlace = false;
+        
+        while (!pathFinder.IsSearchComplete)
+        {
+           pathFinder.FindPath();
+        }
+        
+        RefreshPathfindingButtons();
+    }
+
+    private void ClearEverything()
+    {
+        ClearObstacles();
+        ClearNodeInfoViews();
+        grid.ResetAllNodes();
+        cursorControl.canPlace = true;
+        pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
+        RefreshPathfindingButtons();
+    }
+
+    #endregion
 
     #region Obstacles
+
+    private void ClearObstacles()
+    {
+        if (_currentObstaclesDict != null && _currentObstaclesDict.Count > 0)
+        {
+            foreach (var obstacle in _currentObstaclesDict.Values)
+            {
+                obstacle.SetActive(false);
+            }
+            
+            _currentObstaclesDict.Clear();
+            _currentObstaclesDict.TrimExcess();
+        }
+    }
 
     private void CreateObstaclePool()
     {
@@ -108,6 +172,15 @@ public class AppManager : MonoBehaviour
     #endregion
 
     #region Node Info View
+
+    private void ClearNodeInfoViews()
+    {
+        foreach (var n in _nodeInfoPool)
+        {
+            n.transform.SetParent(nodeInfoPoolParent);
+            n.SetActive(false);
+        }
+    }
 
     private void CreateNodeInfoViewsAndParents()
     {

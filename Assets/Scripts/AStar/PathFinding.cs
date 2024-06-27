@@ -10,79 +10,101 @@ namespace AStar
         
         // this list stores the calculated path
         private List<Node> _calculatedPath;
+        private Node _startNode;
+        private Node _targetNode;
+        private List<Node> _openSet;
+        private HashSet<Node> _closedSet;
+        private bool _isPathFindingEnabled;
+        private bool _isSearchComplete;
 
-        // This function calculates the path using A* algorithm
-        public void FindPath(Grid grid, Vector3 startPos, Vector3 targetPos)
+        public bool IsSearchComplete => _isSearchComplete;
+
+        public void PrepareForNewPathFinding(Grid grid, Vector3 startPos, Vector3 targetPos)
         {
-            Node startNode = grid.GetNodeByPosition(startPos);
-            Node targetNode = grid.GetNodeByPosition(targetPos);
+            _isPathFindingEnabled = true;
+            _isSearchComplete = false;
+            _startNode = grid.GetNodeByPosition(startPos);
+            _targetNode = grid.GetNodeByPosition(targetPos);
 
             // Open set means these nodes are still modifiable and
             // not explored yet, will be marked with yellow color in game view
-            List<Node> openSet = new List<Node>();
-            
+            _openSet = new List<Node>();
+
             // closedSet means these nodes are no longer modifiable, we have explored it completely
             // that means, we can't change the G and H costs and parent node,
             // will be marked with pinkish red color in game view
-            HashSet<Node> closedSet = new HashSet<Node>();
+            _closedSet = new HashSet<Node>();
 
             // Add start node to open set, this is our entry node
-            openSet.Add(startNode);
+            _openSet.Add(_startNode);
+        }
 
-            while (openSet.Count > 0)
+        // This function calculates the path using A* algorithm
+        public void FindPath()
+        {
+            if (!_isPathFindingEnabled || _isSearchComplete)
             {
-                Node currentNode = openSet[0];
+                return;
+            }
+            
+            Node currentNode = _openSet[0];
 
-                for (int i = 0; i < openSet.Count; i++)
+            for (int i = 0; i < _openSet.Count; i++)
+            {
+                // Choose the open node with lowest F cost
+                // or by the lowest H cost if F costs are equal
+                // F cost = G cost + H cost
+                if (_openSet[i].FCost < currentNode.FCost ||
+                    (_openSet[i].FCost == currentNode.FCost &&
+                     _openSet[i].HCost < currentNode.HCost))
                 {
-                    // Choose the open node with lowest F cost
-                    // or by the lowest H cost if F costs are equal
-                    // F cost = G cost + H cost
-                    if (openSet[i].FCost < currentNode.FCost ||
-                        (openSet[i].FCost == currentNode.FCost &&
-                         openSet[i].HCost < currentNode.HCost))
-                    {
-                        currentNode = openSet[i];
-                    }
+                    currentNode = _openSet[i];
+                }
+            }
+
+            _openSet.Remove(currentNode);
+            _closedSet.Add(currentNode); 
+            appManager.UpdateNodeInfoViewStatus(currentNode, NodeStatus.Closed);
+
+            // If target node is found, calculate the path
+            if (currentNode == _targetNode)
+            {
+                _calculatedPath = GetRetracedPath(_startNode, _targetNode);
+                _isPathFindingEnabled = false;
+                _isSearchComplete = true;
+            }
+
+            foreach (Node neighbour in currentNode.Neighbours)
+            {
+                // No need to update the costs of the neighbouring explored nodes and obstacle nodes
+                if (!neighbour.IsWalkable || _closedSet.Contains(neighbour))
+                {
+                    continue;
                 }
 
-                openSet.Remove(currentNode);
-                closedSet.Add(currentNode); 
-                appManager.UpdateNodeInfoViewStatus(currentNode, NodeStatus.Closed);
-
-                // If target node is found, calculate the path
-                if (currentNode == targetNode)
+                // Check if the new G cost is less than the current G cost of the neighbouring
+                // node, if yes we update the costs. Also, if the neighbouring node
+                // is not in open set, we add them to open set, so that on next iteration
+                // we can choose the next lowest H cost node from these neighbours
+                int newMovementCostToNeighbour =
+                    currentNode.GCost + GetDistanceBetweenNodes(currentNode, neighbour);
+                if (newMovementCostToNeighbour < neighbour.GCost || !_openSet.Contains(neighbour))
                 {
-                    _calculatedPath = GetRetracedPath(startNode, targetNode);
-                    return;
+                    neighbour.GCost = newMovementCostToNeighbour;
+                    neighbour.HCost = GetDistanceBetweenNodes(neighbour, _targetNode);
+                    neighbour.Parent = currentNode;
+
+                    if (!_openSet.Contains(neighbour))
+                    {
+                        _openSet.Add(neighbour);
+                        appManager.UpdateNodeInfoViewStatus(neighbour, NodeStatus.Open);
+                    }
                 }
-
-                foreach (Node neighbour in currentNode.Neighbours)
+                
+                if (_openSet.Count == 0)
                 {
-                    // No need to update the costs of the neighbouring explored nodes and obstacle nodes
-                    if (!neighbour.IsWalkable || closedSet.Contains(neighbour))
-                    {
-                        continue;
-                    }
-
-                    // Check if the new G cost is less than the current G cost of the neighbouring
-                    // node, if yes we update the costs. Also, if the neighbouring node
-                    // is not in open set, we add them to open set, so that on next iteration
-                    // we can choose the next lowest H cost node from these neighbours
-                    int newMovementCostToNeighbour =
-                        currentNode.GCost + GetDistanceBetweenNodes(currentNode, neighbour);
-                    if (newMovementCostToNeighbour < neighbour.GCost || !openSet.Contains(neighbour))
-                    {
-                        neighbour.GCost = newMovementCostToNeighbour;
-                        neighbour.HCost = GetDistanceBetweenNodes(neighbour, targetNode);
-                        neighbour.Parent = currentNode;
-
-                        if (!openSet.Contains(neighbour))
-                        {
-                            openSet.Add(neighbour);
-                            appManager.UpdateNodeInfoViewStatus(neighbour, NodeStatus.Open);
-                        }
-                    }
+                    _isPathFindingEnabled = false;
+                    _isSearchComplete = true;
                 }
             }
         }

@@ -9,11 +9,13 @@ public class CursorControl : MonoBehaviour
     [SerializeField] private LayerMask floorMask;
     [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private float cursorHeight;
+    [SerializeField] private MeshRenderer cursorImage;
 
     private Ray _ray;
     private RaycastHit _rayHit;
     private Vector3 _hitPoint;
     private Vector3 _worldPoint;
+    public bool cursorHittingFloor;
     public bool canPlace;
 
     public Vector3 CurrentCursorPoint => _hitPoint;
@@ -26,7 +28,12 @@ public class CursorControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateCursorPosition();
+        cursorImage.enabled = canPlace;
+
+        if (canPlace)
+        {
+            UpdateCursorPosition();
+        }
     }
 
     private void UpdateCursorPosition()
@@ -41,14 +48,14 @@ public class CursorControl : MonoBehaviour
 
         if (Physics.Raycast(_ray, out _rayHit, Mathf.Infinity, floorMask))
         {
-            canPlace = true;
+            cursorHittingFloor = true;
             _hitPoint = RoundWorldPoint(_rayHit.point);
             _hitPoint.y = cursorHeight;
             transform.position = _hitPoint;
         }
         else
         {
-            canPlace = false;
+            cursorHittingFloor = false;
         }
     }
 
@@ -87,7 +94,7 @@ public class CursorControl : MonoBehaviour
 
     private void RequestAddObstacle()
     {
-        if (canPlace)
+        if (cursorHittingFloor)
         {
             _hitPoint.y = 0;
             appManager.AddObstacle(_hitPoint);

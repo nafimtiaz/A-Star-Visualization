@@ -33,5 +33,14 @@ namespace AStar
             GridX = gridX;
             GridZ = gridZ;
         }
+
+        public void ResetNode()
+        {
+            IsWalkable = true;
+            GCost = 0;
+            HCost = 0;
+            Parent = null;
+            NodeStatus = NodeStatus.Open;
+        }
     }
 }

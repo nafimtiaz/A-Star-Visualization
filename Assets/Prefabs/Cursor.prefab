@@ -54,6 +54,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   cursorHeight: 0.01
+  cursorImage: {fileID: 8841269178056455517}
+  cursorHittingFloor: 0
+  canPlace: 0
 --- !u!1 &8948010804401295096
 GameObject:
   m_ObjectHideFlags: 0

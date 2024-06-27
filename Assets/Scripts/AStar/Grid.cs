@@ -20,6 +20,17 @@ namespace AStar
             CacheNodeNeighbours();
         }
 
+        public void ResetAllNodes()
+        {
+            for (int x = 0; x < GridX; x++)
+            {
+                for (int z = 0; z < GridZ; z++)
+                {
+                    _grid[x, z].ResetNode();
+                }
+            }
+        }
+
         public void ToggleNodeAsObstacle(Vector3 pos, bool isObstacle)
         {
             Node n = GetNodeByPosition(pos);
