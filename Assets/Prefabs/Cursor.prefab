@@ -53,9 +53,13 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 128
+  draggableMask:
+    serializedVersion: 2
+    m_Bits: 256
   cursorHeight: 0.01
   cursorImage: {fileID: 8841269178056455517}
   cursorHittingFloor: 0
+  cursorHittingDraggable: 0
   canPlace: 0
 --- !u!1 &8948010804401295096
 GameObject:

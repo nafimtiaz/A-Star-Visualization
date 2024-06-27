@@ -47,6 +47,13 @@ namespace AStar
                 return;
             }
             
+            if (_openSet.Count == 0)
+            {
+                _isPathFindingEnabled = false;
+                _isSearchComplete = true;
+                return;
+            }
+            
             Node currentNode = _openSet[0];
 
             for (int i = 0; i < _openSet.Count; i++)
@@ -99,12 +106,6 @@ namespace AStar
                         _openSet.Add(neighbour);
                         appManager.UpdateNodeInfoViewStatus(neighbour, NodeStatus.Open);
                     }
-                }
-                
-                if (_openSet.Count == 0)
-                {
-                    _isPathFindingEnabled = false;
-                    _isSearchComplete = true;
                 }
             }
         }

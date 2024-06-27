@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AStar;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Grid = AStar.Grid;
@@ -26,15 +27,14 @@ public class AppManager : MonoBehaviour
     [SerializeField] private Button nextStepButton;
     [SerializeField] private Button completeSearchButton;
     [SerializeField] private Button clearEverythingButton;
+    [SerializeField] private TMP_Dropdown placementSelection;
 
     private List<GameObject> _obstaclePool;
     private Dictionary<Node, GameObject> _currentObstaclesDict;
     
     private List<GameObject> _nodeInfoPool;
     private Dictionary<Node, GameObject> _currentNodeInfoParentsDict;
-    private Node StartNode => grid.GetNodeByPosition(start.position);
-    private Node TargetNode => grid.GetNodeByPosition(target.position);
-    
+
 
     void Start()
     {
@@ -55,30 +55,37 @@ public class AppManager : MonoBehaviour
         clearEverythingButton.onClick.AddListener(ClearEverything);
     }
 
-    private void RefreshPathfindingButtons()
+    private void RefreshEditorElements()
     {
         bool enable = pathFinder.IsSearchComplete;
         nextStepButton.interactable = !enable;
         completeSearchButton.interactable = !enable;
+
+        if (!enable)
+        {
+            placementSelection.interactable = true;
+        }
     }
 
     private void ShowNextSearchStep()
     {
         cursorControl.canPlace = false;
         pathFinder.FindPath();
-        RefreshPathfindingButtons();
+        RefreshEditorElements();
+        placementSelection.interactable = false;
     }
     
     private void CompleteFullSearch()
     {
         cursorControl.canPlace = false;
+        placementSelection.interactable = false;
         
         while (!pathFinder.IsSearchComplete)
         {
            pathFinder.FindPath();
         }
         
-        RefreshPathfindingButtons();
+        RefreshEditorElements();
     }
 
     private void ClearEverything()
@@ -88,7 +95,40 @@ public class AppManager : MonoBehaviour
         grid.ResetAllNodes();
         cursorControl.canPlace = true;
         pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
-        RefreshPathfindingButtons();
+        RefreshEditorElements();
+    }
+
+    #endregion
+
+    #region Start/Traget Nodes
+
+    private Node StartNode => grid.GetNodeByPosition(start.position);
+    private Node TargetNode => grid.GetNodeByPosition(target.position);
+
+    public void PlaceStartNode(Vector3 pos)
+    {
+        Node n = grid.GetNodeByPosition(pos);
+
+        if (!n.IsWalkable || n == TargetNode)
+        {
+            return;
+        }
+        
+        start.position = n.WorldPos;
+        pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
+    }
+    
+    public void PlaceTargetNode(Vector3 pos)
+    {
+        Node n = grid.GetNodeByPosition(pos);
+        
+        if (!n.IsWalkable || n == StartNode)
+        {
+            return;
+        }
+        
+        target.position = n.WorldPos;
+        pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
     }
 
     #endregion

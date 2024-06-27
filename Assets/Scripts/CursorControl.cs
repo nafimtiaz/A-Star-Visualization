@@ -1,6 +1,9 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class CursorControl : MonoBehaviour
 {
@@ -8,17 +11,21 @@ public class CursorControl : MonoBehaviour
     [SerializeField] private Camera mainCam;
     [SerializeField] private LayerMask floorMask;
     [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private LayerMask draggableMask;
     [SerializeField] private float cursorHeight;
     [SerializeField] private MeshRenderer cursorImage;
+    [SerializeField] private TMP_Dropdown placementSelection;
 
     private Ray _ray;
     private RaycastHit _rayHit;
     private Vector3 _hitPoint;
     private Vector3 _worldPoint;
     public bool cursorHittingFloor;
+    public bool cursorHittingDraggable;
     public bool canPlace;
 
     public Vector3 CurrentCursorPoint => _hitPoint;
+    private int PlacementIndex => placementSelection.value;
 
     private void Awake()
     {
@@ -66,14 +73,31 @@ public class CursorControl : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (PlacementIndex == 2)
         {
-            RequestAddObstacle();
+            if (Input.GetMouseButton(0))
+            {
+                RequestAddObstacle();
+            }
+        
+            if (Input.GetMouseButton(1))
+            {
+                RequestRemoveObstacle();
+            }
         }
         
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(0) && cursorHittingFloor)
         {
-            RequestRemoveObstacle();
+            _hitPoint.y = 0;
+
+            if (PlacementIndex == 0)
+            {
+                appManager.PlaceStartNode(_hitPoint);
+            }
+            else if(PlacementIndex == 1)
+            {
+                appManager.PlaceTargetNode(_hitPoint);
+            }
         }
     }
 
