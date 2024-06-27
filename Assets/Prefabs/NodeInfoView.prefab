@@ -690,7 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.5633902, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.43529415, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -722,13 +722,13 @@ MonoBehaviour:
   background: {fileID: 6177272091168849152}
   openColor:
     serializedVersion: 2
-    rgba: 4278221269
+    rgba: 4285464831
   closedColor:
     serializedVersion: 2
-    rgba: 4278190232
+    rgba: 4282515608
   pathColor:
     serializedVersion: 2
-    rgba: 4279747328
+    rgba: 4278765568
   GCost: {fileID: 6757134497895565199}
   HCost: {fileID: 4774553390538076643}
   FCost: {fileID: 8609482157381836983}
