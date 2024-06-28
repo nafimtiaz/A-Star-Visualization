@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AStar;
@@ -24,6 +25,8 @@ public class AppManager : MonoBehaviour
 
     [Header("UI")] 
     [SerializeField] private CursorControl cursorControl;
+    [SerializeField] private Button playButton;
+    [SerializeField] private Button pauseButton;
     [SerializeField] private Button nextStepButton;
     [SerializeField] private Button completeSearchButton;
     [SerializeField] private Button clearEverythingButton;
@@ -53,28 +56,53 @@ public class AppManager : MonoBehaviour
         nextStepButton.onClick.AddListener(ShowNextSearchStep);
         completeSearchButton.onClick.AddListener(CompleteFullSearch);
         clearEverythingButton.onClick.AddListener(ClearEverything);
+        playButton.onClick.AddListener(PlayPathFinding);
+        pauseButton.onClick.AddListener(PausePathFinding);
     }
-
-    private void RefreshEditorElements()
+    
+    private void PlayPathFinding()
     {
-        bool enable = pathFinder.IsSearchComplete;
-        nextStepButton.interactable = !enable;
-        completeSearchButton.interactable = !enable;
-
-        if (!enable)
+        if (pathFinder.IsSearchComplete)
         {
-            placementSelection.interactable = true;
+            return;
+        }
+        
+        StartCoroutine(PlayNextSearch());
+        UpdateUIOnPlayBtnPressed();
+    }
+    
+    private void PausePathFinding()
+    {
+        StopAllCoroutines();
+        UpdateUIOnActivityDone();
+    }
+    
+    IEnumerator PlayNextSearch()
+    {
+        cursorControl.canPlace = false;
+        placementSelection.interactable = false;
+
+        while (!pathFinder.IsSearchComplete)
+        {
+            pathFinder.FindPath();
+
+            if (pathFinder.IsSearchComplete)
+            {
+                UpdateUIOnActivityDone();
+            }
+            
+            yield return new WaitForSeconds(0.02f);
         }
     }
 
     private void ShowNextSearchStep()
     {
         cursorControl.canPlace = false;
-        pathFinder.FindPath();
-        RefreshEditorElements();
         placementSelection.interactable = false;
+        pathFinder.FindPath();
+        UpdateUIOnActivityDone();
     }
-    
+
     private void CompleteFullSearch()
     {
         cursorControl.canPlace = false;
@@ -85,7 +113,7 @@ public class AppManager : MonoBehaviour
            pathFinder.FindPath();
         }
         
-        RefreshEditorElements();
+        UpdateUIOnActivityDone();
     }
 
     private void ClearEverything()
@@ -95,8 +123,37 @@ public class AppManager : MonoBehaviour
         grid.ResetAllNodes();
         cursorControl.canPlace = true;
         pathFinder.PrepareForNewPathFinding(grid, start.position, target.position);
-        RefreshEditorElements();
+        UpdateUIOnEverythingCleared();
     }
+
+    #region Toggling Elements
+
+    private void UpdateUIOnPlayBtnPressed()
+    {
+        placementSelection.interactable = false;
+        nextStepButton.interactable = false;
+        completeSearchButton.interactable = false;
+        clearEverythingButton.interactable = false;
+    }
+    
+    private void UpdateUIOnActivityDone()
+    {
+        bool isComplete = pathFinder.IsSearchComplete;
+        placementSelection.interactable = false;
+        nextStepButton.interactable = !isComplete;
+        completeSearchButton.interactable = !isComplete;
+        clearEverythingButton.interactable = true;
+    }
+    
+    private void UpdateUIOnEverythingCleared()
+    {
+        placementSelection.interactable = true;
+        nextStepButton.interactable = true;
+        completeSearchButton.interactable = true;
+        clearEverythingButton.interactable = true;
+    }
+
+    #endregion
 
     #endregion
 
