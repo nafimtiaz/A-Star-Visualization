@@ -1,8 +1,9 @@
 # A-Star-Visualization
 
-This Unity application provides an interactive visualization of the A* (A-star) algorithm, a popular pathfinding and graph traversal technique used in computer science and artificial intelligence. Users can observe how the algorithm navigates through a grid to find the shortest path from a start point to an end point, avoiding obstacles along the way. The visualizer offers adjustable parameters and real-time updates, making it an excellent tool for both educational purposes and a deeper understanding of the A* algorithm's mechanics.
+This Unity application provides an interactive visualization of the A* (A-star) algorithm, a popular pathfinding and graph traversal technique used in computer science and artificial intelligence. Users can observe how the algorithm navigates through a grid to find the shortest path from a start point to an endpoint, avoiding obstacles along the way. The visualizer offers adjustable parameters and real-time updates, making it an excellent tool for both educational purposes and a deeper understanding of the A* algorithm's mechanics.
 
-https://github.com/nafimtiaz/A-Star-Visualization/assets/6371642/3a2aa4a7-0f3f-467b-8ae8-ee1f73f350b7
+https://github.com/nafimtiaz/A-Star-Visualization/assets/6371642/5814b0b5-ab16-45c8-93ad-43dd08174dc0
+
 
 ## Features
 
