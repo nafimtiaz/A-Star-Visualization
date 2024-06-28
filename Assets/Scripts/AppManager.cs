@@ -29,12 +29,13 @@ public class AppManager : MonoBehaviour
     [SerializeField] private Button pauseButton;
     [SerializeField] private Button nextStepButton;
     [SerializeField] private Button completeSearchButton;
+    [SerializeField] private Button resetNodesButton;
     [SerializeField] private Button clearEverythingButton;
     [SerializeField] private TMP_Dropdown placementSelection;
 
     private List<GameObject> _obstaclePool;
     private Dictionary<Node, GameObject> _currentObstaclesDict;
-    
+
     private List<GameObject> _nodeInfoPool;
     private Dictionary<Node, GameObject> _currentNodeInfoParentsDict;
 
@@ -58,6 +59,7 @@ public class AppManager : MonoBehaviour
         clearEverythingButton.onClick.AddListener(ClearEverything);
         playButton.onClick.AddListener(PlayPathFinding);
         pauseButton.onClick.AddListener(PausePathFinding);
+        resetNodesButton.onClick.AddListener(ClearNodeStatesOnly);
     }
     
     private void PlayPathFinding()
@@ -115,10 +117,30 @@ public class AppManager : MonoBehaviour
         
         UpdateUIOnActivityDone();
     }
+    
+    private void ClearNodeStatesOnly()
+    {
+        List<Vector3> currentObstaclesPositions = new List<Vector3>();
+
+        if (_currentObstaclesDict != null && _currentObstaclesDict.Count > 0)
+        {
+            foreach (var node in _currentObstaclesDict.Keys)
+            {
+                currentObstaclesPositions.Add(node.WorldPos);
+            }
+        }
+        
+        ClearEverything();
+
+        foreach (var pos in currentObstaclesPositions)
+        {
+            AddObstacle(pos);
+        }
+    }
 
     private void ClearEverything()
     {
-        ClearObstacles();
+        ClearObstaclesInfo();
         ClearNodeInfoViews();
         grid.ResetAllNodes();
         cursorControl.canPlace = true;
@@ -133,6 +155,7 @@ public class AppManager : MonoBehaviour
         placementSelection.interactable = false;
         nextStepButton.interactable = false;
         completeSearchButton.interactable = false;
+        resetNodesButton.interactable = false;
         clearEverythingButton.interactable = false;
     }
     
@@ -142,6 +165,7 @@ public class AppManager : MonoBehaviour
         placementSelection.interactable = false;
         nextStepButton.interactable = !isComplete;
         completeSearchButton.interactable = !isComplete;
+        resetNodesButton.interactable = true;
         clearEverythingButton.interactable = true;
     }
     
@@ -150,6 +174,7 @@ public class AppManager : MonoBehaviour
         placementSelection.interactable = true;
         nextStepButton.interactable = true;
         completeSearchButton.interactable = true;
+        resetNodesButton.interactable = true;
         clearEverythingButton.interactable = true;
     }
 
@@ -192,7 +217,7 @@ public class AppManager : MonoBehaviour
 
     #region Obstacles
 
-    private void ClearObstacles()
+    private void ClearObstaclesInfo()
     {
         if (_currentObstaclesDict != null && _currentObstaclesDict.Count > 0)
         {
